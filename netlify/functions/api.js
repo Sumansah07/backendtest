@@ -1,6 +1,7 @@
 import express from "express";
 import serverless from "serverless-http";
 import cors from "cors";
+import "dotenv/config";
 import { fileURLToPath } from "url";
 import path from "path";
 import { readdirSync } from "fs";
@@ -56,4 +57,5 @@ app.get("/", (req, res) => {
   res.json({ message: "API is running" });
 });
 
-export const handler = serverless(app);
+const handler = serverless(app);
+export { handler };

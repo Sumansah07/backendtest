@@ -1,10 +1,10 @@
 [build]
   command = "npm install"
   publish = "."
-  functions = "netlify/functions"
 
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "PORT,NODE_ENV,ADMIN_URL,CLIENT_URL"
+  AWS_LAMBDA_JS_RUNTIME = "nodejs18.x"
 
 [[redirects]]
   from = "/*"
@@ -12,5 +12,5 @@
   status = 200
 
 [functions]
+  directory = "netlify/functions"
   node_bundler = "esbuild"
-  external_node_modules = ["express", "@supabase/supabase-js", "bcrypt", "cloudinary", "cors", "jsonwebtoken", "multer", "stripe", "validator"]
