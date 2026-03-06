@@ -7,7 +7,7 @@ import path from "path";
 import { readdirSync } from "fs";
 import connectCloudinary from "./config/cloudinary.js";
 
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
 
 const allowedOrigins = [
   process.env.ADMIN_URL,
