@@ -4,8 +4,7 @@
   functions = "netlify/functions"
 
 [build.environment]
-  SECRETS_SCAN_ENABLED = "false"
-  NODE_VERSION = "18"
+  SECRETS_SCAN_OMIT_KEYS = "PORT,NODE_ENV,ADMIN_URL,CLIENT_URL"
 
 [[redirects]]
   from = "/*"
