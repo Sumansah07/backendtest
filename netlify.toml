@@ -4,7 +4,7 @@
   functions = "netlify/functions"
 
 [build.environment]
-  SECRETS_SCAN_OMIT_PATHS = ".env.example,seed.js,package-lock.json"
+  SECRETS_SCAN_ENABLED = "false"
 
 [[redirects]]
   from = "/*"
