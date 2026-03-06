@@ -66,9 +66,15 @@ routeFiles.map(async (file) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("You should not be here");
+  res.json({ message: "API is running", timestamp: new Date().toISOString() });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on ${port}`);
-});
+// For local development
+if (process.env.NODE_ENV !== "production") {
+  app.listen(port, () => {
+    console.log(`Server is running on ${port}`);
+  });
+}
+
+// Export for Vercel serverless
+export default app;

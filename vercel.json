@@ -11,5 +11,8 @@
       "src": "/(.*)",
       "dest": "/index.mjs"
     }
-  ]
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
