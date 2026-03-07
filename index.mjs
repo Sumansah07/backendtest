@@ -12,37 +12,23 @@ const port = process.env.PORT || 8000;
 const allowedOrigins = [
   process.env.ADMIN_URL,
   process.env.CLIENT_URL,
-  // Add production URLs
-  // Add localhost for development
   "http://localhost:5174",
   "http://localhost:5173",
-  "http://localhost:8081", // iOS simulator
-  "http://10.0.2.2:8081", // Android emulator
-  "http://10.0.2.2:8000", // Android emulator direct access
-].filter(Boolean); // Remove any undefined values
-
-// CORS configuration using config system
-console.log("Allowed CORS Origins:", allowedOrigins);
+  "http://localhost:8081",
+  "http://10.0.2.2:8081",
+  "http://10.0.2.2:8000",
+].filter(Boolean);
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      console.log("CORS request from origin:", origin);
-
-      // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-
-      // In development, allow all origins for easier testing
       if (process.env.NODE_ENV === "development") {
-        console.log("Development mode: allowing all origins");
         return callback(null, true);
       }
-
       if (allowedOrigins.indexOf(origin) !== -1) {
-        console.log("Origin allowed:", origin);
         callback(null, true);
       } else {
-        console.log("Origin blocked:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
@@ -58,15 +44,34 @@ connectCloudinary();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Load routes
 const routesPath = path.resolve(__dirname, "./routes");
 const routeFiles = readdirSync(routesPath);
-routeFiles.map(async (file) => {
-  const routeModule = await import(`./routes/${file}`);
-  app.use("/", routeModule.default);
-});
+
+console.log("Loading routes:", routeFiles);
+
+for (const file of routeFiles) {
+  try {
+    const routeModule = await import(`./routes/${file}`);
+    if (routeModule.default) {
+      app.use("/", routeModule.default);
+      console.log(`✓ Loaded route: ${file}`);
+    } else {
+      console.error(`✗ No default export in ${file}`);
+    }
+  } catch (error) {
+    console.error(`✗ Error loading route ${file}:`, error.message);
+  }
+}
+
+console.log("All routes loaded successfully");
 
 app.get("/", (req, res) => {
-  res.json({ message: "API is running", timestamp: new Date().toISOString() });
+  res.json({ 
+    message: "API is running", 
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV 
+  });
 });
 
 // For local development
